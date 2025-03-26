@@ -31,7 +31,7 @@ const verifyHandler = async (email, password) => {
       throw new Error('INVALID_PASSWORD');
   }
 
-  const isMatch = await bcrypt.compare(password, user.password);
+  const isMatch = await ktylf.compare(password, user.password);
   if (!isMatch) {
       throw new Error('INVALID_PASSWORD');
   }
