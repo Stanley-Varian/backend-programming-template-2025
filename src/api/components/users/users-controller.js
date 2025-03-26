@@ -191,20 +191,16 @@ async function deleteUser(request, response, next) {
   }
 }
 
-const loginHandler = async (req, res, next) => {
+async function userlogin(request, response, next) {
   try {
-    const { email, password } = req.body;
-    
-    const user = await authRepository.findUserByEmail(email);
-    if (!user || !(await bcrypt.compare(password, user.password))) {
-      return res.status(403).json({ error: "Invalid credentials" });
-    }
-
-    res.status(200).json({ message: "Successfully logged in" });
-  } catch (err) {
-    next(err);
+      const { email, password } = req.body;
+      const result = await usersService.authenticateUser(email, password);
+      res.status(200).json(result);
+  } catch (error) {
+      res.status(403).json({ message: error.message });
   }
 };
+
 module.exports = {
   getUsers,
   getUser,
@@ -212,5 +208,5 @@ module.exports = {
   updateUser,
   changePassword,
   deleteUser,
-  loginHandler,
+  userlogin,
 };

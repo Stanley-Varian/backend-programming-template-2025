@@ -25,18 +25,18 @@ async function deleteUser(id) {
   return usersRepository.deleteUser(id);
 }
 
-const verifyUser = async (email, password) => {
-  const user = await authRepository.findUserByEmail(email);
+const verifyHandler = async (email, password) => {
+  const user = await usersRepository.findUserByEmail(email);
   if (!user) {
-    throw new Error("USER_NOT_FOUND");
+      throw new Error('INVALID_PASSWORD');
   }
 
-  const passwordValid = await bcrypt.compare(password, user.password);
-  if (!passwordValid) {
-    throw new Error("INVALID_CREDENTIALS");
+  const isMatch = await bcrypt.compare(password, user.password);
+  if (!isMatch) {
+      throw new Error('INVALID_PASSWORD');
   }
 
-  return { message: "Authentication successful" };
+  return { message: 'success' };
 };
 
 module.exports = {
@@ -46,5 +46,5 @@ module.exports = {
   createUser,
   updateUser,
   deleteUser,
-  verifyUser,
+  verifyHandler,
 };
